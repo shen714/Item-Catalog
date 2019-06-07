@@ -25,12 +25,17 @@ def show_categories_and_latest_items():
 @app.route('/category/<int:category_id>/items')
 def show_one_category_and_items(category_id):
     #categories = session.query(Category).all()
-    category = session.query(Category).filter_by(category_id=Category.category_id).first()
+    category = session.query(Category).filter_by(category_id=Category.category_id).one()
     category_name = category.name
     category_items = session.query(Item).filter_by(category_id = Item.category_id).all()
     return render_template('category.html', category_items = category_items, category_name = category_name)
 
-
+# Show one item with detailed information
+@app.route('/category/<int:category_id>/items/<int:item_id>')
+def show_one_item(category_id, item_id):
+    category = session.query(Category).filter_by(category_id=Category.category_id).one()
+    item = session.query(Item).filter_by(item_id=item_id).one()
+    return render_template('item.html', category=category, item=item)
 
 '''
 # Create an item
