@@ -24,11 +24,8 @@ class Item(Base):
     item_name = Column(String(250), nullable=False)
     item_id = Column(Integer, primary_key=True)
     item_description = Column(String(250))
-    item_price = Column(String(8))
-
     category_id = Column(Integer, ForeignKey('category.category_id'))
     category = relationship(Category)
-
     user_id = Column(Integer, ForeignKey('user.user_id'))
     user = relationship(User)
 
