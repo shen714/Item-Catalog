@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Item, Category, User
@@ -11,6 +11,10 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+########################################
+# Read
+########################################
 
 # Show the categories and the latest added items
 @app.route('/')
@@ -36,6 +40,21 @@ def show_one_item(category_id, item_id):
     category = session.query(Category).filter_by(category_id=Category.category_id).one()
     item = session.query(Item).filter_by(item_id=item_id).one()
     return render_template('item.html', category=category, item=item)
+
+########################################
+# Create
+########################################
+
+# add a new catagory
+@app.route('/category/add', methods=['GET', 'POST'])
+def add_category():
+    if request.method == 'POST':
+        new_category = Category(category_name=request.form['name'])
+        session.add(new_category)
+        session.commit()
+        return redirect(url_for('show_categories_and_latest_items'))
+    else:
+        return render_template('new_category.html')
 
 '''
 # Create an item
