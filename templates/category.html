@@ -1,1 +1,31 @@
- 
+ <html>
+    <head>
+    </head>
+    
+    <body>
+        <div class = 'pane'>
+            <h1>Categories</h1>
+                <a href="{{url_for('show_categories_and_latest_items')}}">
+                    <h3>Create a new category</h3>
+                </a>
+                {% for Category in Categories %}
+                    <a href="{{url_for('category', category_id=Category.category_id)}}">
+                        <p>{{Category.category_name}}</p>
+                    </a>
+                    <a href = "{{url_for('edit_category',category_id=Category.category_id)}}">
+                        <p>Edit Category</p>
+                    </a>
+                    <a href = "{{url_for('delete_category',category_id=Category.category_id)}}">
+                        <p>Delete Category</p>
+                    </a>
+                {% endfor %}
+            <h1>{{Category.name}} items</h1>
+                {% for item in Category %}
+                <a href="{{url_for('show_one_category_and_items', category_id=Category.category_id)}}">
+                    <p>{{item.item_name}}</p>
+                </a>
+                {% endfor %}
+
+            </div>
+    </body>
+</html>
