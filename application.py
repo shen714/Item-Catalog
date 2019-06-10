@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Item, Category, User
+import sys
 
 app = Flask(__name__)
 
@@ -20,26 +21,27 @@ session = DBSession()
 @app.route('/')
 @app.route('/categories/')
 def show_categories_and_latest_items():
-    categories = session.query(Category).all()
-    items = session.query(Item).order_by(Item.item_id.desc())
-    return render_template('categories.html', categories = categories)
+    print("categories")
+    all_categories = session.query(Category).all()
+    latest_items = session.query(Item).order_by(Item.item_id.desc())
+    return render_template('categories.html', categories = all_categories, items = latest_items)
 
 # Show one category and the items in it
-@app.route('/categories/<int:category_id>')
-@app.route('/categories/<int:category_id>/items')
-def show_one_category_and_items(category_id):
-    #categories = session.query(Category).all()
-    category = session.query(Category).filter_by(category_id=Category.category_id).one()
-    category_name = category.name
-    category_items = session.query(Item).filter_by(category_id = Item.category_id).all()
-    return render_template('category.html', category_items = category_items, category_name = category_name)
+@app.route('/categories/<int:chosen_category_id>')
+@app.route('/categories/<int:chosen_category_id>/items')
+def show_one_category_and_items(chosen_category_id):
+    all_categories = session.query(Category).all()
+    chosen_category = session.query(Category).filter_by(category_id=chosen_category_id).one()
+    chosen_category_name = chosen_category.category_name
+    chosen_category_items = session.query(Item).filter_by(category_id =chosen_category_id).all()
+    return render_template('category.html', categories=all_categories, category=chosen_category, items =chosen_category_items, name = chosen_category_name)
 
 # Show one item with detailed information
-@app.route('/categories/<int:category_id>/items/<int:item_id>')
-def show_one_item(category_id, item_id):
-    category = session.query(Category).filter_by(category_id=Category.category_id).one()
-    item = session.query(Item).filter_by(item_id=item_id).one()
-    return render_template('item.html', category=category, item=item)
+@app.route('/categories/<int:chosen_category_id>/items/<int:chosen_item_id>')
+def show_one_item(chosen_category_id, chosen_item_id):
+    category = session.query(Category).filter_by(category_id=chosen_category_id).one()
+    item = session.query(Item).filter_by(item_id=chosen_item_id, category_id=chosen_category_id).one()
+    return render_template('item.html', item=item)
 
 ########################################
 # Create
@@ -52,20 +54,22 @@ def add_category():
         new_category = Category(category_name=request.form['name'])
         session.add(new_category)
         session.commit()
+        flash("new category created!")
         return redirect(url_for('show_categories_and_latest_items'))
     else:
         return render_template('new_category.html')
 
 # add a new item in a category
-@app.route('/categories/<int:category_id>/add/', methods=['GET', 'POST'])
-def add_item():
+@app.route('/categories/<int:this_category_id>/items/add/', methods=['GET', 'POST'])
+def add_item(this_category_id):
     if request.method == 'POST':
         new_item = Item(item_name=request.form['name'], 
-        item_description=request.form['descripton'], 
-        category_id=request.form['category'])
+        item_description=request.form['description'],
+        category_id=this_category_id)
         session.add(new_item)
         session.commit()
-        return redirect(url_for('show_categories_and_latest_items'))
+        flash("new item created!")
+        return redirect(url_for('show_one_category_and_items', chosen_category_id=this_category_id))
     else:
         return render_template('new_item.html')
 
@@ -75,10 +79,11 @@ def add_item():
 # Delete the whole category
 @app.route('/categories/<int:category_id>/delete/', methods=['GET', 'POST'])
 def delete_category(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(category_id=category_id).one()
     if request.method == 'POST':
         session.delete(category)
         session.commit()
+        flash("category deleted!")
         return redirect(url_for('show_categories_and_latest_items'))
     else:
         return render_template('delete_category.html', category=category)
@@ -90,24 +95,25 @@ def delete_item(category_id, item_id):
     if request.method == 'POST':
         session.delete(item)
         session.commit()
-        return redirect(url_for('show_categories_and_latest_items'))
+        flash("item deleted!")
+        return redirect(url_for('show_one_category_and_items', chosen_category_id=category_id))
     else:
         return render_template('delete_item.html', item=item)
 
 ########################################
 # Edit
 ########################################
-
 # Edit a category
-@app.route('/categories/<int:category_id>/edit/', methods=['GET', 'POST'])
-def edit_category(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
+@app.route('/categories/<int:chosen_category_id>/edit/', methods=['GET', 'POST'])
+def edit_category(chosen_category_id):
+    category_to_edit = session.query(Category).filter_by(category_id=chosen_category_id).one()
     if request.method == 'POST':
         if request.form['name']:
-            category.name = request.form['name']
+            category_to_edit.category_name = request.form['name']
+            flash("category edited!")
             return redirect(url_for('show_categories_and_latest_items'))
     else:
-        return render_template('edit_category.html', category=category)
+        return render_template('edit_category.html', category=category_to_edit)
 
 # Edit an item
 @app.route('/categories/<int:category_id>/items/<int:item_id>/edit', methods=['GET', 'POST'])
@@ -115,29 +121,17 @@ def edit_item(category_id, item_id):
     item = session.query(Item).filter_by(item_id=item_id).one()
     if request.method == 'POST':
         if request.form['name']:
-            item_name=request.form['name'] 
+            item.item_name=request.form['name'] 
         if request.form['description']:
-            item_description=request.form['descripton']
-        if request.form['category']:
-            item_category=request.form['category']
+            item.item_description=request.form['description']
         session.add(item)
         session.commit()
-        return redirect(url_for('show_categories_and_latest_items'))
+        flash("item edited!")
+        return redirect(url_for('show_one_category_and_items', chosen_category_id=category_id))
     else:
         return render_template('edit_item.html', item=item)
 
-
-
-
-
-'''
-# Create an item
-@app.route('/create')
-def create_item():
-    session.add(new_item)
-    session.commit()
-  '''  
-
 if __name__ == '__main__':
+    app.secret_key = 'super_secret_key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
