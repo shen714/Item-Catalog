@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Item, Category, User
@@ -12,6 +12,21 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+@app.route('/categories/JSON')
+def categoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(categories=[category.serialize for category in categories])
+
+@app.route('/categories/<int:chosen_category_id>/items/JSON')
+def itemsJSON(chosen_category_id):
+    items = session.query(Item).filter_by(category_id =chosen_category_id).all()
+    return jsonify(items=[item.serialize for item in items])
+
+@app.route('/categories/<int:chosen_category_id>/items/<int:chosen_item_id>/JSON')
+def itemJSON(chosen_category_id, chosen_item_id):
+    item = session.query(Item).filter_by(category_id=chosen_category_id, item_id = chosen_item_id).one()
+    return jsonify(item=item.serialize)
 
 ########################################
 # Read
