@@ -1,9 +1,10 @@
 <html>
-        <head>
-        </head>
-        
+      <head>
+                <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styling.css') }}">
+      </head>
+
         <body>
-            <div class = 'pane'>
+                <div class = 'pane'>
                 <h1>{{ item.item_name }}</h1>
                 <p>description: {{item.item_description}}</p>
                 <p>category:{{item.category.category_name}}</p>
