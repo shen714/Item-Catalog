@@ -26,17 +26,13 @@ $ Python project.py
 
 ## JSON Endpoints
 
-`/api/v1/catalog.json` - Returns JSON of all items in catalog
+`/categories/JSON` 
 
-<img src="assets/catalogJSON.png" width="800">
+<img src="assets/categories_JSON.png" width="800">
 
-`/api/v1/categories/<int:category_id>/item/<int:catalog_item_id>/JSON` - Returns JSON of selected item in catalog
+`/categories/<int:chosen_category_id>/items/JSON`
 
-<img src="assets/catalog-itemJSON.png" width="800">
-
-`/api/v1/categories/JSON` - Returns JSON of all categories in catalog
-
-<img src="assets/categoriesJSON.png" width="800">
+<img src="assets/items_JSON.png" width="800">
 
 
 ## REST Endpoints
@@ -69,9 +65,6 @@ $ Python project.py
 
 <img src="assets/edit_category.jpg" width="800">
 
-`/categories/<int:category_id>/items/<int:item_id>/edit`
-
-<img src="assets/edit_item.jpg" width="800">
 
 
 ### Credits
