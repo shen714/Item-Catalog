@@ -28,11 +28,11 @@ $ Python project.py
 
 `/categories/JSON` 
 
-<img src="assets/categories_JSON.png" width="800">
+<img src="assets/categories_JSON.jpg" width="800">
 
 `/categories/<int:chosen_category_id>/items/JSON`
 
-<img src="assets/items_JSON.png" width="800">
+<img src="assets/items_JSON.jpg" width="800">
 
 
 ## REST Endpoints
