@@ -65,7 +65,5 @@ $ Python project.py
 
 <img src="assets/edit_category.jpg" width="800">
 
-
-
 ### Credits
 The flower information come from Flower Muse
