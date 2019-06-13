@@ -1,16 +1,15 @@
-<html>
-    <head>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styling.css') }}">
-    </head>
-    
-    <body>
-        <h1>New Item</h1>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<h1>New Item</h1>
             <form action="#" method = 'post'>
                 <p>Name:</p>
                     <input type ='text' size='30' name='name'>
                 <p>Description:</p>
-                    <input type ='text' size='255' name='description'>
-                <input type='submit' value='Create'>
+                    <input style="height:200px" type ='text' size='100' name='description'>
+                <div class="button">
+                <button class="ui violet basic button" type='submit' value='Create'>Create</button>
+                <a class="ui violet basic button" href = "{{url_for('show_categories')}}">Cancel </a>
+                </div>
             </form>
-    </body>
-    </html>
+            {% endblock %}

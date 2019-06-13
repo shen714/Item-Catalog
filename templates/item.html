@@ -1,15 +1,9 @@
-<html>
-      <head>
-                <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styling.css') }}">
-      </head>
-
-        <body>
-                <div class = 'pane'>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
                 <h1>{{ item.item_name }}</h1>
                 <p>description: {{item.item_description}}</p>
                 <p>category:{{item.category.category_name}}</p>
-                <a href = "{{url_for('edit_item',category_id=item.category_id, item_id=item.item_id)}}"><p>Edit Item</p></a>
-                <a href = "{{url_for('delete_item',category_id=item.category_id, item_id=item.item_id)}}"><p>Delete Item</p></a>
-        </body>
-        
-</html>
+                <a class="ui violet basic button" href = "{{url_for('edit_item',category_id=item.category_id, item_id=item.item_id)}}">Edit Item</a>
+                <a class="ui violet basic button" href = "{{url_for('delete_item',category_id=item.category_id, item_id=item.item_id)}}">Delete Item</a>
+                {% endblock %}

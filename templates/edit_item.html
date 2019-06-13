@@ -1,18 +1,15 @@
-<html>
-    <head>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styling.css') }}">
-	</head>
-
-    <body>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
         <h1> Edit Item </h1>
             <form action="#" method = 'post'>
                 <p>Name:</p>
                     <input type ='text' size='30' name='name' placeholder = '{{item.item_name }}'>
                 <p>Description:</p>
-                    <input type='text' size='255' name='description' placeholder='{{item.item_description}}'>
-                <input type='submit' value='Edit'>
-                <a href = "{{url_for('show_one_item', chosen_category_id=item.category_id, chosen_item_id=item.item_id)}}">Cancel </a>
+                    <input style="height:200px" type='text' size='100' name='description' placeholder='{{item.item_description}}'>
+                <div class="button">
+                <button class="ui violet basic button" type='submit' value='Edit'>Edit</button>
+                <a class="ui violet basic button" href = "{{url_for('show_one_item', chosen_category_id=item.category_id, chosen_item_id=item.item_id)}}">Cancel </a>
+                </div>
             </form>
-    </body>
-
-</html>
+            {% endblock %}

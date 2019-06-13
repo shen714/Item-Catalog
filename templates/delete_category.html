@@ -1,14 +1,9 @@
-<html>
-    <head>
-        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styling.css') }}">
-	</head>
-
-    <body>
-        <h1> Are you sure you want to delete {{category.name}}? </h1>
-        <form action="#" method = 'post'>
-            <input type='submit', value = 'Delete'>
-        </form>
-
-        <a href = "{{url_for('show_one_category_and_items', chosen_category_id=category.category_id)}}"> Cancel </a>
-    </body>
-</html>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+    <h1> Are you sure you want to delete {{category.name}}? </h1>
+    <form action="" method = 'post'>
+            <button class="ui violet basic button" type="submit" type="submit">Delete</button>    
+            <a class="ui violet basic button" href = "{{url_for('show_categories')}}">Cancel</a>   
+    </form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+                <h1>{{ item.item_name }}</h1>
+                <p>description: {{item.item_description}}</p>
+                <p>category:{{item.category.category_name}}</p>
+                {% endblock %}

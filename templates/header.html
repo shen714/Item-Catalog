@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+{% block content %}
+    <header>
+      <div>
+        <a href="{{url_for('show_categories')}}">
+            <h1 class="title inline ui massive header">Flower World</h1>
+        </a>
+      </div>
+
+    <div class="login">
+    {%if 'username' not in session %}
+        <a class="ui violet basic button" href="{{url_for('showLogin')}}">Login </a>
+    {% else %}
+        <a class="ui violet basic button" href="{{url_for('logout')}}">Logout </a>
+    {% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash">
+        {% for message in messages %}
+            <h2><strong>{{message}}</strong></h2>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+    </header>
+{% endblock %}

@@ -5,10 +5,6 @@
         <div class="five wide column">
             <div class="categories ui vertical fluid tabular menu">
                 <a class="item" href="{{url_for('show_category', chosen_category_id=category.category_id)}}"><p>{{category.category_name}}</p></a>
-                <div >
-                <a class="ui violet basic button" href = "{{url_for('edit_category',chosen_category_id=category.category_id)}}">Edit Category</a>
-                <a class="ui violet basic button" href = "{{url_for('delete_category',category_id=category.category_id)}}">Delete Category</a>   
-                </div>
             </div>
         </div>
 
@@ -19,7 +15,6 @@
                         <a href = "{{url_for('show_one_item',chosen_category_id=item.category_id, chosen_item_id=item.item_id)}}
                         "><p>{{item.item_name}}</p></a>
                     {% endfor %}
-                    <a class="ui violet basic button" href="{{url_for('add_item', this_category_id=category.category_id)}}">Create a new Item</a>
                  
             </div>
         </div>
