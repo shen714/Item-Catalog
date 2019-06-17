@@ -4,9 +4,9 @@
         <h1> Edit Item </h1>
             <form action="#" method = 'post'>
                 <p>Name:</p>
-                    <input type ='text' size='30' name='name' placeholder = '{{item.item_name }}'>
+                    <input type ='text' size='30' name='name' placeholder = '{{item.item_name }}' required>
                 <p>Description:</p>
-                    <input style="height:200px" type='text' size='100' name='description' placeholder='{{item.item_description}}'>
+                    <input style="height:200px" type='text' size='100' name='description' placeholder='{{item.item_description}}' required>
                 <div class="button">
                 <button class="ui violet basic button" type='submit' value='Edit'>Edit</button>
                 <a class="ui violet basic button" href = "{{url_for('show_one_item', chosen_category_id=item.category_id, chosen_item_id=item.item_id)}}">Cancel </a>

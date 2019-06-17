@@ -4,9 +4,9 @@
 <h1>New Item</h1>
             <form action="#" method = 'post'>
                 <p>Name:</p>
-                    <input type ='text' size='30' name='name'>
+                    <input type ='text' size='30' name='name' required>
                 <p>Description:</p>
-                    <input style="height:200px" type ='text' size='100' name='description'>
+                    <input style="height:200px" type ='text' size='100' name='description' required>
                 <div class="button">
                 <button class="ui violet basic button" type='submit' value='Create'>Create</button>
                 <a class="ui violet basic button" href = "{{url_for('show_categories')}}">Cancel </a>

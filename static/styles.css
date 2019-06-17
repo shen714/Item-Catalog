@@ -74,4 +74,12 @@ header {
     background: #cee5f5;
 }
 
+input:invalid {
+    border: 2px solid red;
+}
+
+input:valid {
+    border: 2px solid black;
+}
+
 
